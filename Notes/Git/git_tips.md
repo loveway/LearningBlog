@@ -104,4 +104,4 @@ Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
 所以Git合并分支也很快！就改改指针，工作区内容也不变！
 
 合并完分支后，甚至可以删除dev分支。删除dev分支就是把dev指针给删掉，删掉后，我们就剩下了一条master分支：
-![git_delete](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_delete.png)
+![git_delete](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_delete_dev.png)
