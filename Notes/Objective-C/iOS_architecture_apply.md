@@ -1,10 +1,10 @@
 # 谈谈关于 iOS 的架构以及应用
- 一直以来想写一篇文章，但是没找到合适的主题，前段时间一直在看 [Flutter](https://flutter.dev/) 的一些东西，本来有意向想写关于 Flutter 的一些总结，但是看的有些零零散散，并且没有实际应用过，所以也就搁置了。正好最近一段时间除主业务之余，一直在做我们 [甘草医生](https://www.igancao.com/) 用户端的重构，刚好有一些对于 iOS 架构方面的看法与感悟，在这里与大家分享。
+&emsp;&emsp;一直以来想写一篇文章，但是没找到合适的主题，前段时间一直在看 [Flutter](https://flutter.dev/) 的一些东西，本来有意向想写关于 Flutter 的一些总结，但是看的有些零零散散，并且没有实际应用过，所以也就搁置了。正好最近一段时间除主业务之余，一直在做我们 [甘草医生](https://www.igancao.com/) 用户端的重构，刚好有一些对于 iOS 架构方面的看法与感悟，在这里与大家分享。
 万事开头难！其实在开始重构之前，我是很纠结的，一直很难开始。我也曾翻阅过很多资料，想找到一个合适的符合我们自己目前业务的架构，最后做了种种的比对与测试，选择了 `MVVM + 组件化 + AOP` 的模式来重构。可能有人会疑问，你为什么选择这样的架构模式？使用这些模式有什么好处？这些抽象的模式概念具体应该怎么在实际项目中运用？OK，那我们就带着这些疑问一步步往下看。
-## 关于架构模式
- 我们先来了解一下在 iOS 中常用的一些架构模式
-* [MVC](https://zh.wikipedia.org/wiki/MVC)
-关于 MVC（Model-View-Controller）这个设计模式我相信稍有些编程经验的人都了解至少听说过，作为应用最为广泛的架构模式，大家应该都是耳熟能详了，但是不同的人对 MVC 的理解是不同的。在 iOS 中，Cocoa Touch 框架使用的就是 MVC ，如下
+## 一、关于架构模式
+&emsp;&emsp;我们先来了解一下在 iOS 中常用的一些架构模式
+##### 1. [MVC](https://zh.wikipedia.org/wiki/MVC)
+&ensp;&ensp;&ensp;&ensp;关于 MVC（Model-View-Controller）这个设计模式我相信稍有些编程经验的人都了解至少听说过，作为应用最为广泛的架构模式，大家应该都是耳熟能详了，但是不同的人对 MVC 的理解是不同的。在 iOS 中，Cocoa Touch 框架使用的就是 MVC ，如下
 
 <p align='center'>
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_mvc.png'>
@@ -19,12 +19,11 @@
  3. 较差的可读性 
     我相信大家都有接手一个项目然后改 bug 的经历，当你看到一个有 10000 行的代码的 ViewController 的时候，你肯定吐槽过
     
-* [MVVM](https://zh.wikipedia.org/wiki/MVVM)
-
-MVVM （Model-View-ViewModel），其实也是基于 MVC 的。上面我们说的 MVC 臃肿的问题，在 MVVM 的架构模式中得到了解决，我们一些常用的网络请求、数据存储等都交给它处理，这样就可以分离出 ViewController 里面的一些代码使其“减肥”。
+##### 2. [MVVM](https://zh.wikipedia.org/wiki/MVVM)
+&emsp;&emsp;MVVM （Model-View-ViewModel），其实也是基于 MVC 的。上面我们说的 MVC 臃肿的问题，在 MVVM 的架构模式中得到了解决，我们一些常用的网络请求、数据存储等都交给它处理，这样就可以分离出 ViewController 里面的一些代码使其“减肥”。
 
 <p align='center'>
-<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_mvvm.png'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_mvvm.gif'>
 </p>
 
 如图，就是 MVC 到 MVVM 的演变过程，在 MVVM 中 V 包含 View 和 ViewController，可以看出来 MVVM 其实就是把 MVC 中的 C 分离出来一个 ViewModel 用来做一些数据加工的事情。在上面 MVC 模式中讲了，一个 ViewController 经常会有很多东西要处理，数据加工、网络请求等，现在都可以交给 ViewModel 去做了。这样，Controller 就可以实现“减肥”，而更加专注于自己的数据调配的工作，绑定 ViewModel 和 View 的关系
@@ -35,11 +34,11 @@ MVVM （Model-View-ViewModel），其实也是基于 MVC 的。上面我们说�
 
 可以看出 MVVM 的模式解决了 MVC 模式中的一些问题，使得 ViewController 代码量减少、使得可读性变高、代码单元测试变得简单。但是 MVVM 也有其一些缺陷，比如由于 ViewModel 和 View 的绑定，那么出现了 bug 第一时间定位不到 bug 的位置，有可能是 View 层的 bug 传到了 Model 层。还有一点就是对于较大的工程的项目，数据的绑定和转换需要较大的成本。关于其缺点以及可行的解决方式，在 [Casa Taloyum](https://casatwy.com/) 的 [iOS应用架构谈 网络层设计方案](https://casatwy.com/iosying-yong-jia-gou-tan-wang-luo-ceng-she-ji-fang-an.html) 已经说明的比较详细，有兴趣的童鞋可以去看一下，几篇关于架构方面的文章都很值得一读。
 
-* 其他的一些架构模式
-还有一些其他的架构模式，比如 MVP（Model-View-Presenter）、VIPER（View-Interactor-Presenter-Entity-Routing）、MVCS（Model-View-Controller-Store）等，其实都是基于 MVC 思想派生出来的一些架构模式，基本都是为了给 Controller 减负而生的，所以还是那句话，万变不离 MVC ！
+##### 3. 其他的一些架构模式
+&emsp;&emsp;还有一些其他的架构模式，比如 MVP（Model-View-Presenter）、VIPER（View-Interactor-Presenter-Entity-Routing）、MVCS（Model-View-Controller-Store）等，其实都是基于 MVC 思想派生出来的一些架构模式，基本都是为了给 Controller 减负而生的，所以还是那句话，万变不离 MVC ！
 
-## 架构模式的选用
-了解到每个架构模式的优缺点之后，这里，我决定用 MVVM 的架构模式来重构我们的 APP。那么说到 MVVM ，我们就肯定是要提到 RAC ，也就是 [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)，它是一个响应式编程的框架，可以使每层交互起来更加方便清晰。当然， RAC 肯定不是实现数据绑定的唯一方案，在 iOS 中比如 KVO、Notification、Delegate、Block等都可以实现，只不过是 RAC 的实现更加优雅一些，所以我们经常会采用 RAC 来实现数据的绑定。关于 RAC ，下面一张图很清晰的解释了它的思想，也就是 [FRP](https://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B0%E5%BC%8F%E5%8F%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B)（Function Reactive Programming）函数响应式编程
+## 二、架构模式的选用
+&emsp;&emsp;了解到每个架构模式的优缺点之后，这里，我决定用 MVVM 的架构模式来重构我们的 APP。那么说到 MVVM ，我们就肯定是要提到 RAC ，也就是 [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)，它是一个响应式编程的框架，可以使每层交互起来更加方便清晰。当然， RAC 肯定不是实现数据绑定的唯一方案，在 iOS 中比如 KVO、Notification、Delegate、Block等都可以实现，只不过是 RAC 的实现更加优雅一些，所以我们经常会采用 RAC 来实现数据的绑定。关于 RAC ，下面一张图很清晰的解释了它的思想，也就是 [FRP](https://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B0%E5%BC%8F%E5%8F%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B)（Function Reactive Programming）函数响应式编程
 
 <p align='center'>
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_frp.png'>
@@ -75,7 +74,7 @@ self.phoneTextField.delegate = self;
 可以看出代码变得更加清晰了，我们只需要实现对 `phoneTextField` 信号的监听，就可以实现了。我们再来看一个例子，比如在我们用户端的登录界面，如下图
 
 <p align='center'>
-<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_login.png'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_login.gif'>
 </p>
 
 按着正常的逻辑就是用户输入 11 位手机号码后再输入密码才能使其登录，这个时候我们的登录按钮才能点击，要想实现这个逻辑，正常的做法应该如下，
@@ -114,8 +113,9 @@ self.passwordTextField.delegate = self;
     }];
 ```
 我们将 `self.phoneTextField.rac_textSignal` 和 `self.passwordTextField.rac_textSignal` 这两个信号合并成一个信号并且监听，实现一定的逻辑，简单明了。当然， RAC 的好处远远不止这些，这里只是冰山一角，有兴趣的可以去自己用一用这个库，体验更多的功能，这里也就不多赘述了。
-## 关于组件化
-组件化这个概念相信大家都听说过，使用组件化的好处就是使我们项目更好的解耦，降低各个分层之间的耦合度，使项目始终保持着 `高聚合，低耦合` 的特点。举个简单的例子，在 iOS 中页面之间的跳转，两个开发人员负责开发两个页面，小 A 负责开发的 AViewController 已经开发完毕，然后需要点击按钮跳到小 B 负责的 BViewController，并且需要传一个值，如下
+
+## 三、关于组件化
+&emsp;&emsp;组件化这个概念相信大家都听说过，使用组件化的好处就是使我们项目更好的解耦，降低各个分层之间的耦合度，使项目始终保持着 `高聚合，低耦合` 的特点。举个简单的例子，在 iOS 中页面之间的跳转，两个开发人员负责开发两个页面，小 A 负责开发的 AViewController 已经开发完毕，然后需要点击按钮跳到小 B 负责的 BViewController，并且需要传一个值，如下
 ```objc
 //1、导入BViewController
 #import "BViewController"
@@ -297,9 +297,9 @@ NSString *const gc_actionRegistVC = @"registViewController";
 当然，虽然中间者这个方案能很好地实现各页面之间的解耦，但是也有它的缺点。我们可以看到我们在 `CTMediator+RegistViewControllerActions.h` 中定义的 `gc_targetRegistVC` 和 `gc_actionRegistVC` 这两个常量，分别对应 ‘target’ 和 ‘action’，这里面需要注意的是一定要细心，如果这儿写错，会引发未知的错误，但是编译器并不会提示，对应的 `Target_...`一定要和这里的 `target` 一致，否则就会引发错误。这种方案的实施对开发人员的细心程度是有很大要求的，因为如果有错误，在编译中无法发现的。
 组件化的方案的实施还有很多其他的方案，比如 `url-block`、`protocol-class`方式，有兴趣的可以看看蘑菇街的 [MGJRouter](https://github.com/meili/MGJRouter)，还有就是阿里的 [BeeHive](https://github.com/alibaba/BeeHive) ，它是基于 Spring 的 Service 理念，使用 `Protocol` 的方式进行模块间的解耦。
 
-## 关于 AOP
+## 四、关于 AOP
+&emsp;&emsp;先看一个案例，小 C 最近愁眉苦脸，你发现了他状态不对劲，于是就发生了下面的对话
 
-先看一个案例，小 C 最近愁眉苦脸，你发现了他状态不对劲，于是就发生了下面的对话
 ```
 你：“小 C，你这是怎么啦，是不是工作上有什么不顺心的？”
 
@@ -384,23 +384,24 @@ NSString *const gc_actionRegistVC = @"registViewController";
 > 
 > 2、对于 `+ (void)load` 还有 `+ (void)initialize` 这两个方法不是太了解的童鞋可以看看大左 [Draveness](https://draveness.me/) 的 [你真的了解 load 方法么？](https://draveness.me/load) 和 [懒惰的 initialize 方法](https://draveness.me/initialize) 这两篇文章，了解这两个方法相信对你会很有帮助
 
-## 实际项目中的应用
-了解了上面的内容，接下来我们看看在实际项目中的应用
-* 项目的目录结构
+## 五、实际项目中的应用
+&emsp;&emsp;了解了上面的内容，接下来我们看看在实际项目中的应用
+
+##### 1、项目的目录结构
 
 <p align='center'>
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog1.png'>
 </p>
 
-  重构的项目结构如上图，相信大家一看名称就大概知道每个文件夹是做什么的，由于 `Model`、`View`、`ViewController` 和 `ViewModel` 这几个类联系比较紧密，所以建议这几个类的项目结构保持一致，如下图     
+&emsp;&emsp;重构的项目结构如上图，相信大家一看名称就大概知道每个文件夹是做什么的，由于 `Model`、`View`、`ViewController` 和 `ViewModel` 这几个类联系比较紧密，所以建议这几个类的项目结构保持一致，如下图     
 
 <p align='center'>
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog2.png'>
 </p>
 
 这样目录一目了然，比如你想找一个登录相关的东西，那么你就知道可以在各大目录下的 `Login` 模块里面去寻找。而且建议目录不要过深，一般三层就够了，过深的话查找起来比较麻烦。
-* Category 的使用
-可能大家已经看到了，我的项目目录里面有一项是 `AppDelegate+Config` 这一项，这其实就是 `AppDelegate` 的一个 `Category` 。在 iOS 开发中 `Category` 随处可见，如何应用那就是看自己的需求情况了，这里我用  `AppDelegate+Config` 这个类来处理 `AppDelegate` 里面的一些配置，减少 `AppDelegate` 的代码，让项目更加清晰，使用了以后我们可以看到 `AppDelegate` 目录的代码片段
+##### 2、Category 的使用
+&emsp;&emsp;可能大家已经看到了，我的项目目录里面有一项是 `AppDelegate+Config` 这一项，这其实就是 `AppDelegate` 的一个 `Category` 。在 iOS 开发中 `Category` 随处可见，如何应用那就是看自己的需求情况了，这里我用  `AppDelegate+Config` 这个类来处理 `AppDelegate` 里面的一些配置，减少 `AppDelegate` 的代码，让项目更加清晰，使用了以后我们可以看到 `AppDelegate` 目录的代码片段
 
  ```objc
     #import "AppDelegate.h"
@@ -435,11 +436,13 @@ NSString *const gc_actionRegistVC = @"registViewController";
     }
    ```
 这样代码看起来很清晰，相信大家都有过一打开 `AppDelegate` 这个类看到一大堆代码，东找西找很不规范的经历。由于是项目重构初期，`AppDelegate` 和 `AppDelegate+Config` 使用的比较多，暂时先放在这里，后期再将其移动到合适的位置。
-* [CocoaPods](https://cocoapods.org/) 的使用
-  相信这个东西大家都用过，为什么要强调一下 CocoaPods 的使用，因为在我整理之前项目时发现，有的地方（比如微信支付、支付宝支付）就是直接将 lib 直接拖进工程，有的还需要各种配置，这样如果升级或者移除的时候就很麻烦。使用 CocoaPods 管理的话那么升级或者移除就很方便，所以建议还是能使用 CocoaPods 安装的就直接使用其安装，最好不要直接在项目中添加第三方。
+
+##### 3、[CocoaPods](https://cocoapods.org/) 的使用
+&emsp;&emsp;相信这个东西大家都用过，为什么要强调一下 CocoaPods 的使用，因为在我整理之前项目时发现，有的地方（比如微信支付、支付宝支付）就是直接将 lib 直接拖进工程，有的还需要各种配置，这样如果升级或者移除的时候就很麻烦。使用 CocoaPods 管理的话那么升级或者移除就很方便，所以建议还是能使用 CocoaPods 安装的就直接使用其安装，最好不要直接在项目中添加第三方。
   还有一种情况就是有时候第三方满足不了我们的需求，需要修改一下，所以有些就不集成在 CocoaPods 里面了（万一一不小心 update 以后修改的内容被覆盖）。这里我想说的是，对于这种情况你仍然可以使用 CocoaPods，那么怎么解决需要修改代码的问题？没错，就是 Category ！
-* MVVM的运用
-  具体项目的实现我们还是以登录为例，在 ViewModel 中
+  
+##### 4、MVVM 的运用
+&emsp;&emsp;具体项目的实现我们还是以登录为例，在 ViewModel 中
   
    ```objc
 - (void)initialize {
@@ -473,8 +476,7 @@ NSString *const gc_actionRegistVC = @"registViewController";
 }
 ```
 这里我们做了网络的请求以及一些数据的绑定，在 ViewController 中
-
- ```objc
+```objc
 - (void)gc_bindViewModel {
         [super gc_bindViewModel];
         
@@ -517,15 +519,15 @@ NSString *const gc_actionRegistVC = @"registViewController";
 }
 ```
   可以看到 ViewController 将 View 和 ViewModel 进行了绑定，并且当登录按钮点击的时候监测登录信号的变化，根据其信号执行的开始和结束来控制 HUD 的显示和消失，然后再根据信号的返回结果来处理相关的登录配置和跳转（极光推送的登录、根据状态执行跳转逻辑等）。这里网络的请求都是在 ViewModel 中进行的，ViewController 只负责处理ViewModel、View 和 Model 之间的关系。
-* [DRY](https://zh.wikipedia.org/wiki/%E4%B8%80%E6%AC%A1%E4%B8%94%E4%BB%85%E4%B8%80%E6%AC%A1)
-   DRY（Don't repeat yourself），能封装起来的类一定要封装起来，到时候使用也简单，千万不要为了一时之快而各种 `ctrl + c` 和 `ctrl + v`，这样会使你的代码混乱不堪，这其实也是项目臃肿的一个原因。在重构的过程中就封装了很多的类，管理起来很方便
+##### 5、[DRY](https://zh.wikipedia.org/wiki/%E4%B8%80%E6%AC%A1%E4%B8%94%E4%BB%85%E4%B8%80%E6%AC%A1)
+&emsp;&emsp;DRY（Don't repeat yourself），能封装起来的类一定要封装起来，到时候使用也简单，千万不要为了一时之快而各种 `ctrl + c` 和 `ctrl + v`，这样会使你的代码混乱不堪，这其实也是项目臃肿的一个原因。在重构的过程中就封装了很多的类，管理起来很方便
 
 <p align='center'>
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog3.png'>
 </p>
 
-## 一些感想
-其实最开始的时候一直都有重构的想法，但是迟迟没有动手。其中一个原因就是不知道该如何动手，不知道该使用什么工具，该使用哪种方案。等到真正开始的时候发现其实没有想象中的那么难，所以当你有想法的时候你就去做，在做的过程中你可以慢慢体会。
+## 六、一些感想
+&emsp;&emsp;其实最开始的时候一直都有重构的想法，但是迟迟没有动手。其中一个原因就是不知道该如何动手，不知道该使用什么工具，该使用哪种方案。等到真正开始的时候发现其实没有想象中的那么难，所以当你有想法的时候你就去做，在做的过程中你可以慢慢体会。
 在重构之前，我又重新读了一下代码规范，也就是 [禅与 Objective-C 编程艺术](https://github.com/objc-zen/objc-zen-book-cn) 这本书，并在重构的过程中严格执行，比如 `loginButton` 就绝不会写成 `loginBtn`，相信我，按着规范来，你会体会到其中的意义的。
 在做一个 APP 之前，在我们新建工程的时候，就应该已经确定你的架构模式，并且在以后的业务处理中，严格的按着这种设计模式执行下去。如果在前面需求量不多的时候你还能按着最初的设计模式执行下去，在业务突然增多的时候，为了偷懒省事，直接各种代码混乱的糅合在一起，各种 `ctrl + c`和`ctrl + v`，导致架构的混乱引起蝴蝶效应，那么这个架构在后期如果再想重新规范起来将会是个费时费力的过程。所以，在最初设计的时候我们就应该确定架构方案，以及严格的执行下去。
 还有就是平时的一些技术积累以及知识存储。知其然知其所以然，研究技术背后的底层原理，会对你有很大的帮助。比如说我要说来说说 ViewController 的生命周期，可能大家都会随口说出 `viewDidLoad`、`viewWillAppear` 等，我要问说说 View 的生命周期，可能就会有少数人茫然了。这些都是很基本的东西，可能你平时用不到，但是还是需要你去了解他，注意细节。很多人可能会经常有这样的困惑，比如我想写一个图片浏览器，但是我不知道该如何写？写完了性能如何？别人是怎么写的？这个就是需要平时的积累了，比如关于 `UIText` 相关的的你就得想到 [YYText](https://github.com/ibireme/YYText)，数据存储方面的你不仅要知道老的 [fmdb](https://github.com/ccgus/fmdb) ，微信开源的 [wcdb](https://github.com/Tencent/wcdb) 有没有去了解下呢？比如我就平时没事喜欢在 [GitHub](https://github.com/) 上看一些 star 比较高的开源库，看看别人是怎么实现的，想想在我的项目中怎么使用。举个例子，最近阿里开源的 [协程](https://zh.wikipedia.org/wiki/%E5%8D%8F%E7%A8%8B) 框架 [coobjc](https://github.com/alibaba/coobjc/blob/master/README_cn.md) ，就在项目中使用，用来判断用户是否登录
@@ -555,11 +557,18 @@ NSString *const gc_actionRegistVC = @"registViewController";
 现在只是重构的开始，现在已经完成的登录的重构就 `LoginViewController` 而言，与之前相比就已经有很大的改变了（之前将近 800 行代码，重构后只有 200 行），可能总体上各个模块代码加起来都差不多，但是为 ViewController 减负后更加清晰明了了。后面重构完成后会出一个代码量、包大小、性能等的对比，到时候再与大家分享！
 
 
-> Reference
-> 1、[浅谈 MVC、MVP 和 MVVM 架构模式](https://draveness.me/mvx)
+>Reference:
+>
+> 1、[浅谈 MVC、MVP 和 MVVM 架构模式](https://draveness.me/mvx) 
+>
 > 2、[iOS应用架构谈 view层的组织和调用方案](https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html)
+>
 > 3、[iOS 如何实现Aspect Oriented Programming](https://www.jianshu.com/p/dc9dca24d5de)
+> 
 > 4、[CTMediator](https://github.com/casatwy/CTMediator)
+>  
 > 5、[BeeHive](https://github.com/alibaba/BeeHive)
+>  
 > 6、[objc-zen-book](https://github.com/objc-zen/objc-zen-book-cn)
+>  
 > 7、[coobjc](https://github.com/alibaba/coobjc/blob/master/README_cn.md)
