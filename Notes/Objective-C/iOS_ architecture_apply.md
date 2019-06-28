@@ -441,7 +441,7 @@ NSString *const gc_actionRegistVC = @"registViewController";
 &emsp;&emsp;相信这个东西大家都用过，为什么要强调一下 CocoaPods 的使用，因为在我整理之前项目时发现，有的地方（比如微信支付、支付宝支付）就是直接将 lib 直接拖进工程，有的还需要各种配置，这样如果升级或者移除的时候就很麻烦。使用 CocoaPods 管理的话那么升级或者移除就很方便，所以建议还是能使用 CocoaPods 安装的就直接使用其安装，最好不要直接在项目中添加第三方。
   还有一种情况就是有时候第三方满足不了我们的需求，需要修改一下，所以有些就不集成在 CocoaPods 里面了（万一一不小心 update 以后修改的内容被覆盖）。这里我想说的是，对于这种情况你仍然可以使用 CocoaPods，那么怎么解决需要修改代码的问题？没错，就是 Category ！
   
-##### 4、MVVM的运用
+##### 4、MVVM 的运用
 &emsp;&emsp;具体项目的实现我们还是以登录为例，在 ViewModel 中
   
    ```objc
