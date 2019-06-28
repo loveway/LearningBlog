@@ -1,6 +1,6 @@
-# git 简单实用命令
-```bash
-mkdir test 创建一个名为 test 的文件夹
+# Git 简单实用命令
+
+`mkdir test` 创建一个名为 test 的文件夹
 
 cd test 进入 test 文件夹
 
@@ -62,7 +62,7 @@ git tag v1.0 打一个 tag 如果想给以前的版本打 tag ，那就 git log 
  git tags -d v1.0 删除本地标签，如果本地标签已经推送到远程，想删除，就先用这个命令把本地的标签先删除，然后使用 git push origin :refs/tags/v1.0 这个命令
  
  cat .git/config git 的配置
-```
+
 ![git head 原理](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_head.png)
 
 ![git 工作区与暂存区](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_stash.png)
