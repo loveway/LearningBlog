@@ -298,7 +298,7 @@ NSString *const gc_actionRegistVC = @"registViewController";
 组件化的方案的实施还有很多其他的方案，比如 `url-block`、`protocol-class`方式，有兴趣的可以看看蘑菇街的 [MGJRouter](https://github.com/meili/MGJRouter)，还有就是阿里的 [BeeHive](https://github.com/alibaba/BeeHive) ，它是基于 Spring 的 Service 理念，使用 `Protocol` 的方式进行模块间的解耦。
 
 ## 四、关于 AOP
-先看一个案例，小 C 最近愁眉苦脸，你发现了他状态不对劲，于是就发生了下面的对话
+&emsp;&emsp;先看一个案例，小 C 最近愁眉苦脸，你发现了他状态不对劲，于是就发生了下面的对话
 
 ```
 你：“小 C，你这是怎么啦，是不是工作上有什么不顺心的？”
@@ -393,7 +393,7 @@ NSString *const gc_actionRegistVC = @"registViewController";
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog1.png'>
 </p>
 
-  重构的项目结构如上图，相信大家一看名称就大概知道每个文件夹是做什么的，由于 `Model`、`View`、`ViewController` 和 `ViewModel` 这几个类联系比较紧密，所以建议这几个类的项目结构保持一致，如下图     
+&emsp;&emsp;重构的项目结构如上图，相信大家一看名称就大概知道每个文件夹是做什么的，由于 `Model`、`View`、`ViewController` 和 `ViewModel` 这几个类联系比较紧密，所以建议这几个类的项目结构保持一致，如下图     
 
 <p align='center'>
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog2.png'>
@@ -401,7 +401,7 @@ NSString *const gc_actionRegistVC = @"registViewController";
 
 这样目录一目了然，比如你想找一个登录相关的东西，那么你就知道可以在各大目录下的 `Login` 模块里面去寻找。而且建议目录不要过深，一般三层就够了，过深的话查找起来比较麻烦。
 ##### 2、Category 的使用
-可能大家已经看到了，我的项目目录里面有一项是 `AppDelegate+Config` 这一项，这其实就是 `AppDelegate` 的一个 `Category` 。在 iOS 开发中 `Category` 随处可见，如何应用那就是看自己的需求情况了，这里我用  `AppDelegate+Config` 这个类来处理 `AppDelegate` 里面的一些配置，减少 `AppDelegate` 的代码，让项目更加清晰，使用了以后我们可以看到 `AppDelegate` 目录的代码片段
+&emsp;&emsp;可能大家已经看到了，我的项目目录里面有一项是 `AppDelegate+Config` 这一项，这其实就是 `AppDelegate` 的一个 `Category` 。在 iOS 开发中 `Category` 随处可见，如何应用那就是看自己的需求情况了，这里我用  `AppDelegate+Config` 这个类来处理 `AppDelegate` 里面的一些配置，减少 `AppDelegate` 的代码，让项目更加清晰，使用了以后我们可以看到 `AppDelegate` 目录的代码片段
 
  ```objc
     #import "AppDelegate.h"
@@ -438,11 +438,11 @@ NSString *const gc_actionRegistVC = @"registViewController";
 这样代码看起来很清晰，相信大家都有过一打开 `AppDelegate` 这个类看到一大堆代码，东找西找很不规范的经历。由于是项目重构初期，`AppDelegate` 和 `AppDelegate+Config` 使用的比较多，暂时先放在这里，后期再将其移动到合适的位置。
 
 ##### 3、[CocoaPods](https://cocoapods.org/) 的使用
-相信这个东西大家都用过，为什么要强调一下 CocoaPods 的使用，因为在我整理之前项目时发现，有的地方（比如微信支付、支付宝支付）就是直接将 lib 直接拖进工程，有的还需要各种配置，这样如果升级或者移除的时候就很麻烦。使用 CocoaPods 管理的话那么升级或者移除就很方便，所以建议还是能使用 CocoaPods 安装的就直接使用其安装，最好不要直接在项目中添加第三方。
+&emsp;&emsp;相信这个东西大家都用过，为什么要强调一下 CocoaPods 的使用，因为在我整理之前项目时发现，有的地方（比如微信支付、支付宝支付）就是直接将 lib 直接拖进工程，有的还需要各种配置，这样如果升级或者移除的时候就很麻烦。使用 CocoaPods 管理的话那么升级或者移除就很方便，所以建议还是能使用 CocoaPods 安装的就直接使用其安装，最好不要直接在项目中添加第三方。
   还有一种情况就是有时候第三方满足不了我们的需求，需要修改一下，所以有些就不集成在 CocoaPods 里面了（万一一不小心 update 以后修改的内容被覆盖）。这里我想说的是，对于这种情况你仍然可以使用 CocoaPods，那么怎么解决需要修改代码的问题？没错，就是 Category ！
   
 ##### 4、MVVM的运用
-具体项目的实现我们还是以登录为例，在 ViewModel 中
+&emsp;&emsp;具体项目的实现我们还是以登录为例，在 ViewModel 中
   
    ```objc
 - (void)initialize {
@@ -520,7 +520,7 @@ NSString *const gc_actionRegistVC = @"registViewController";
 ```
   可以看到 ViewController 将 View 和 ViewModel 进行了绑定，并且当登录按钮点击的时候监测登录信号的变化，根据其信号执行的开始和结束来控制 HUD 的显示和消失，然后再根据信号的返回结果来处理相关的登录配置和跳转（极光推送的登录、根据状态执行跳转逻辑等）。这里网络的请求都是在 ViewModel 中进行的，ViewController 只负责处理ViewModel、View 和 Model 之间的关系。
 ##### 5、[DRY](https://zh.wikipedia.org/wiki/%E4%B8%80%E6%AC%A1%E4%B8%94%E4%BB%85%E4%B8%80%E6%AC%A1)
-DRY（Don't repeat yourself），能封装起来的类一定要封装起来，到时候使用也简单，千万不要为了一时之快而各种 `ctrl + c` 和 `ctrl + v`，这样会使你的代码混乱不堪，这其实也是项目臃肿的一个原因。在重构的过程中就封装了很多的类，管理起来很方便
+&emsp;&emsp;DRY（Don't repeat yourself），能封装起来的类一定要封装起来，到时候使用也简单，千万不要为了一时之快而各种 `ctrl + c` 和 `ctrl + v`，这样会使你的代码混乱不堪，这其实也是项目臃肿的一个原因。在重构的过程中就封装了很多的类，管理起来很方便
 
 <p align='center'>
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog3.png'>
