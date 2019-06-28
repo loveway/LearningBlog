@@ -63,7 +63,9 @@ git tag v1.0 打一个 tag 如果想给以前的版本打 tag ，那就 git log 
  
  cat .git/config git 的配置
 ```
-![git head 原理](media/15366506269381/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-11%20%E4%B8%8B%E5%8D%884.26.18.png)![git 工作区与暂存区](media/15366506269381/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-09-11%20%E4%B8%8B%E5%8D%885.11.41.png)
+![git head 原理](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_head.png)
+
+![git 工作区与暂存区](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_stash.png)
 
 #小结
 * 场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -- file。
@@ -90,12 +92,16 @@ Warning: Permanently added 'github.com' (RSA) to the list of known hosts.
 如果你实在担心有人冒充GitHub服务器，输入yes前可以对照GitHub的RSA Key的指纹信息是否与SSH连接给出的一致。
 
 开始的时候，master分支是一条线，Git用master指向最新的提交，再用HEAD指向master，就能确定当前分支，以及当前分支的提交点，每次提交，master分支都会向前移动一步，这样，随着你不断提交，master分支的线也越来越长：
-![](media/15366506269381/15366722588438.png)
-当我们创建新的分支，例如dev时，Git新建了一个指针叫dev，指向master相同的提交，再把HEAD指向dev，就表示当前分支在dev上：![](media/15366506269381/15366723181080.png)
+![git_master](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_master.png)
+当我们创建新的分支，例如dev时，Git新建了一个指针叫dev，指向master相同的提交，再把HEAD指向dev，就表示当前分支在dev上：
+![git_dev](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_dev.png)
 你看，Git创建一个分支很快，因为除了增加一个dev指针，改改HEAD的指向，工作区的文件都没有任何变化！
 
-不过，从现在开始，对工作区的修改和提交就是针对dev分支了，比如新提交一次后，dev指针往前移动一步，而master指针不变：![](media/15366506269381/15366723331321.png)
-假如我们在dev上的工作完成了，就可以把dev合并到master上。Git怎么合并呢？最简单的方法，就是直接把master指向dev的当前提交，就完成了合并：![](media/15366506269381/15366723434998.png)
+不过，从现在开始，对工作区的修改和提交就是针对dev分支了，比如新提交一次后，dev指针往前移动一步，而master指针不变：
+![git_dev2](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_dev2.png)
+假如我们在dev上的工作完成了，就可以把dev合并到master上。Git怎么合并呢？最简单的方法，就是直接把master指向dev的当前提交，就完成了合并：
+![git_merge](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_merge.png)
 所以Git合并分支也很快！就改改指针，工作区内容也不变！
 
-合并完分支后，甚至可以删除dev分支。删除dev分支就是把dev指针给删掉，删掉后，我们就剩下了一条master分支：![](media/15366506269381/15366723588127.png)
+合并完分支后，甚至可以删除dev分支。删除dev分支就是把dev指针给删掉，删掉后，我们就剩下了一条master分支：
+![git_delete](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_delete.png)
