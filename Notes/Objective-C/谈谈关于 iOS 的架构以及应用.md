@@ -6,7 +6,10 @@
 * [MVC](https://zh.wikipedia.org/wiki/MVC)
 关于 MVC（Model-View-Controller）这个设计模式我相信稍有些编程经验的人都了解至少听说过，作为应用最为广泛的架构模式，大家应该都是耳熟能详了，但是不同的人对 MVC 的理解是不同的。在 iOS 中，Cocoa Touch 框架使用的就是 MVC ，如下
 
-      ![MVC-c440](media/15560876575931/Untitled.png)
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_mvc.png'>
+</p>
+
 这是苹果典型的 MVC 模式，用户通过 View 将交互（点击、滑动等）通知给 Controller，Controller 收到通知后更新 Model，Model 状态改变以后再通知 Controller 来改变他们负责的 View。由于在 iOS 中我们常用的 UIViewController 本身就自带一个 View，所以在 iOS 开发中 Controller  层和 View 层总是紧密的耦合在一起，如果一个页面业务逻辑量大的话，一个视图控制器经常会很多行的代码，导致视图控制器非常的臃肿。
 可见，MVC 模式虽然能带来简单的业务分层，但是想必各位使用 MVC 模式的 iOSer 们经常会被以下几个问题困扰
  1. 厚重的 ViewController
@@ -15,18 +18,35 @@
     对一个有几千甚至上万行的 ViewController 进行单元测试是一个非常难以接受的事情，可以说，谁接到这个任务都是难以接受的
  3. 较差的可读性 
     我相信大家都有接手一个项目然后改 bug 的经历，当你看到一个有 10000 行的代码的 ViewController 的时候，你肯定吐槽过
+    
 * [MVVM](https://zh.wikipedia.org/wiki/MVVM)
-  MVVM （Model-View-ViewModel），其实也是基于 MVC 的。上面我们说的 MVC 臃肿的问题，在 MVVM 的架构模式中得到了解决，我们一些常用的网络请求、数据存储等都交给它处理，这样就可以分离出 ViewController 里面的一些代码使其“减肥”。
-![MCVMVMV-c540](media/15560876575931/MCVMVMV.gif)
+
+MVVM （Model-View-ViewModel），其实也是基于 MVC 的。上面我们说的 MVC 臃肿的问题，在 MVVM 的架构模式中得到了解决，我们一些常用的网络请求、数据存储等都交给它处理，这样就可以分离出 ViewController 里面的一些代码使其“减肥”。
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_mvvm.png'>
+</p>
+
 如图，就是 MVC 到 MVVM 的演变过程，在 MVVM 中 V 包含 View 和 ViewController，可以看出来 MVVM 其实就是把 MVC 中的 C 分离出来一个 ViewModel 用来做一些数据加工的事情。在上面 MVC 模式中讲了，一个 ViewController 经常会有很多东西要处理，数据加工、网络请求等，现在都可以交给 ViewModel 去做了。这样，Controller 就可以实现“减肥”，而更加专注于自己的数据调配的工作，绑定 ViewModel 和 View 的关系
-![MVVM-c540](media/15560876575931/MVVM.png)
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_mvvm2.png'>
+</p>
+
 可以看出 MVVM 的模式解决了 MVC 模式中的一些问题，使得 ViewController 代码量减少、使得可读性变高、代码单元测试变得简单。但是 MVVM 也有其一些缺陷，比如由于 ViewModel 和 View 的绑定，那么出现了 bug 第一时间定位不到 bug 的位置，有可能是 View 层的 bug 传到了 Model 层。还有一点就是对于较大的工程的项目，数据的绑定和转换需要较大的成本。关于其缺点以及可行的解决方式，在 [Casa Taloyum](https://casatwy.com/) 的 [iOS应用架构谈 网络层设计方案](https://casatwy.com/iosying-yong-jia-gou-tan-wang-luo-ceng-she-ji-fang-an.html) 已经说明的比较详细，有兴趣的童鞋可以去看一下，几篇关于架构方面的文章都很值得一读。
+
 * 其他的一些架构模式
 还有一些其他的架构模式，比如 MVP（Model-View-Presenter）、VIPER（View-Interactor-Presenter-Entity-Routing）、MVCS（Model-View-Controller-Store）等，其实都是基于 MVC 思想派生出来的一些架构模式，基本都是为了给 Controller 减负而生的，所以还是那句话，万变不离 MVC ！
+
 ## 架构模式的选用
 了解到每个架构模式的优缺点之后，这里，我决定用 MVVM 的架构模式来重构我们的 APP。那么说到 MVVM ，我们就肯定是要提到 RAC ，也就是 [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa)，它是一个响应式编程的框架，可以使每层交互起来更加方便清晰。当然， RAC 肯定不是实现数据绑定的唯一方案，在 iOS 中比如 KVO、Notification、Delegate、Block等都可以实现，只不过是 RAC 的实现更加优雅一些，所以我们经常会采用 RAC 来实现数据的绑定。关于 RAC ，下面一张图很清晰的解释了它的思想，也就是 [FRP](https://zh.wikipedia.org/wiki/%E5%87%BD%E6%95%B0%E5%BC%8F%E5%8F%8D%E5%BA%94%E5%BC%8F%E7%BC%96%E7%A8%8B)（Function Reactive Programming）函数响应式编程
-![RAC-c540](media/15560876575931/545446-20151029165449466-94607195.png)
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_frp.png'>
+</p>
+
 上图可以看到 c 根据 a 和 b 的值变化的过程。举个例子，我们一般在登录的时候，会限制输入手机号的长度，那么按着以往的做法，就是实现 UITextField 的代理，监听输入文字的变化，如下
+
 ```objc
 //1、导入代理
 <UITextFieldDelegate>
@@ -53,7 +73,11 @@ self.phoneTextField.delegate = self;
     }];
 ```
 可以看出代码变得更加清晰了，我们只需要实现对 `phoneTextField` 信号的监听，就可以实现了。我们再来看一个例子，比如在我们用户端的登录界面，如下图
-![Login-c](media/15560876575931/Reflector%20Recording%20-1-.gif)
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_login.png'>
+</p>
+
 按着正常的逻辑就是用户输入 11 位手机号码后再输入密码才能使其登录，这个时候我们的登录按钮才能点击，要想实现这个逻辑，正常的做法应该如下，
 ```objc
 //1、导入代理
@@ -84,7 +108,7 @@ self.passwordTextField.delegate = self;
         @strongify(self);
         if (x.boolValue) {
             self.loginButton.enabled = YES;
-        } else{
+        } else {
             self.loginButton.enabled = NO;
         }
     }];
@@ -101,9 +125,17 @@ bViewController.uid = @"123";
 [self.navigationController pushViewController:bViewController animated:YES];
 ```
 这时候小 A 已经准备去写其他业务了，但是一问才发现小 B 并没有开始写 BViewController，还需要一段时间才能写，那么小 A 就郁闷了，要么就等着小 B 写完我再去做其他的，要么就先注释我这段代码，等到小 B 写完我再解注释。造成这种情况的原因就是因为两个页面之间紧紧地耦合在一起了，在开发人员少或者独立开发的情况下我们经常使用这种方式进行页面间的跳转和传值，页面基本都是一个人负责，所以感觉不到问题，试想一下在几十人开发的工作组中，划分很细的情况下，你自己的脱节是不是给别人带去了不必要的麻烦。我相信这是所有人都不想发生的，那么我们就需要对页面进行组件化解耦，这里我所使用的组件化方案是 `target-action` 方式，使用的是 [Casa Taloyum](https://casatwy.com/) 的 [CTMediator](https://github.com/casatwy/CTMediator)，其主要的思想就是通过一个中间者来提供服务，通过 `runtime`来调用组件服务，比如以前的依赖关系如下
-![未组件化-c](media/15560876575931/%E6%9C%AA%E7%BB%84%E4%BB%B6%E5%8C%96.png)
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_unmodularization.png'>
+</p>
+
 那么使用 CTMediator 实现组件化以后，各组件之间的依赖关系变成下图
-![组件化-c](media/15560876575931/%E7%BB%84%E4%BB%B6%E5%8C%96.png)
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_ modularization.png'>
+</p>
+
 这样各模块之间就实现了解耦，模块之间的通信就全部通过中间层来进行。我们回过头来再看之前的小 A 和小 B，如果使用这种方式，那么小 A 的跳转代码应该如下
 ```objc
 //1、导入Mediator
@@ -355,9 +387,17 @@ NSString *const gc_actionRegistVC = @"registViewController";
 ## 实际项目中的应用
 了解了上面的内容，接下来我们看看在实际项目中的应用
 * 项目的目录结构
-  ![项目目录-c](media/15560876575931/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-25%20%E4%B8%8B%E5%8D%886.28.06.png)
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog1.png'>
+</p>
+
   重构的项目结构如上图，相信大家一看名称就大概知道每个文件夹是做什么的，由于 `Model`、`View`、`ViewController` 和 `ViewModel` 这几个类联系比较紧密，所以建议这几个类的项目结构保持一致，如下图     
-![项目目录1-c](media/15560876575931/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-25%20%E4%B8%8B%E5%8D%886.33.34.png)
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog2.png'>
+</p>
+
 这样目录一目了然，比如你想找一个登录相关的东西，那么你就知道可以在各大目录下的 `Login` 模块里面去寻找。而且建议目录不要过深，一般三层就够了，过深的话查找起来比较麻烦。
 * Category 的使用
 可能大家已经看到了，我的项目目录里面有一项是 `AppDelegate+Config` 这一项，这其实就是 `AppDelegate` 的一个 `Category` 。在 iOS 开发中 `Category` 随处可见，如何应用那就是看自己的需求情况了，这里我用  `AppDelegate+Config` 这个类来处理 `AppDelegate` 里面的一些配置，减少 `AppDelegate` 的代码，让项目更加清晰，使用了以后我们可以看到 `AppDelegate` 目录的代码片段
@@ -390,7 +430,7 @@ NSString *const gc_actionRegistVC = @"registViewController";
     }
     // after iOS 9.0
     - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
-         [self handleOpenURL:url];
+        [self handleOpenURL:url];
         return NO;
     }
    ```
@@ -479,7 +519,10 @@ NSString *const gc_actionRegistVC = @"registViewController";
   可以看到 ViewController 将 View 和 ViewModel 进行了绑定，并且当登录按钮点击的时候监测登录信号的变化，根据其信号执行的开始和结束来控制 HUD 的显示和消失，然后再根据信号的返回结果来处理相关的登录配置和跳转（极光推送的登录、根据状态执行跳转逻辑等）。这里网络的请求都是在 ViewModel 中进行的，ViewController 只负责处理ViewModel、View 和 Model 之间的关系。
 * [DRY](https://zh.wikipedia.org/wiki/%E4%B8%80%E6%AC%A1%E4%B8%94%E4%BB%85%E4%B8%80%E6%AC%A1)
    DRY（Don't repeat yourself），能封装起来的类一定要封装起来，到时候使用也简单，千万不要为了一时之快而各种 `ctrl + c` 和 `ctrl + v`，这样会使你的代码混乱不堪，这其实也是项目臃肿的一个原因。在重构的过程中就封装了很多的类，管理起来很方便
-   ![项目目录-c](media/15560876575931/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202019-04-25%20%E4%B8%8B%E5%8D%887.57.20.png)
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_catalog3.png'>
+</p>
 
 ## 一些感想
 其实最开始的时候一直都有重构的想法，但是迟迟没有动手。其中一个原因就是不知道该如何动手，不知道该使用什么工具，该使用哪种方案。等到真正开始的时候发现其实没有想象中的那么难，所以当你有想法的时候你就去做，在做的过程中你可以慢慢体会。
