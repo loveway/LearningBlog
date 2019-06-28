@@ -89,6 +89,7 @@
 ##### `cat .git/config`
 git 的配置
 
+## 版本回退
 git 版本的回退速度非常快，因为在 git 内部有个指向当前版本的 HEAD 指针，当你回退版本的时候，git 仅仅是把 HEAD 从指向 append GPL 改为指向 add distributed
 
 <p align='center'>
