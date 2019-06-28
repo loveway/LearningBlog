@@ -89,9 +89,18 @@
 ##### `cat .git/config`
 git 的配置
 
-![git head 原理](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_head.png)
+git 版本的回退速度非常快，因为在 git 内部有个指向当前版本的 HEAD 指针，当你回退版本的时候，git 仅仅是把 HEAD 从指向 append GPL 改为指向 add distributed
 
-![git 工作区与暂存区](https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_stash.png)
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_head.png' width='243' height='165'>,
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_head2.png' width='243' height='165'>
+</p>
+
+然后顺便把工作区的文件更新了，所以你让 HEAD 指向哪个版本，你就把当前版本定位在哪
+
+<p align='center'>
+<img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Git/picture/git_stash.png'>
+</p>
 
 ## 小结
 * 场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令 `git checkout -- file`
