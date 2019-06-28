@@ -597,3 +597,5 @@ NSString *const gc_actionRegistVC = @"registViewController";
 > 6、[objc-zen-book](https://github.com/objc-zen/objc-zen-book-cn)
 >  
 > 7、[coobjc](https://github.com/alibaba/coobjc/blob/master/README_cn.md)
+>
+> 8、[Using a Gemfile](https://guides.cocoapods.org/using/a-gemfile.html)
