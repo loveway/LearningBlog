@@ -440,6 +440,31 @@ NSString *const gc_actionRegistVC = @"registViewController";
 ##### 3、[CocoaPods](https://cocoapods.org/) 的使用
 &emsp;&emsp;相信这个东西大家都用过，为什么要强调一下 CocoaPods 的使用，因为在我整理之前项目时发现，有的地方（比如微信支付、支付宝支付）就是直接将 lib 直接拖进工程，有的还需要各种配置，这样如果升级或者移除的时候就很麻烦。使用 CocoaPods 管理的话那么升级或者移除就很方便，所以建议还是能使用 CocoaPods 安装的就直接使用其安装，最好不要直接在项目中添加第三方。
   还有一种情况就是有时候第三方满足不了我们的需求，需要修改一下，所以有些就不集成在 CocoaPods 里面了（万一一不小心 update 以后修改的内容被覆盖）。这里我想说的是，对于这种情况你仍然可以使用 CocoaPods，那么怎么解决需要修改代码的问题？没错，就是 Category ！
+>Tips:
+>
+>如果是团队多人协作开发，每个成员安装有不同版本 cocoapods gem，以至于在 pod install 的时候会安装不同版本的 cocoapods。为了解决这个问题，使团队成员拥有相同版本的 cocoapods，我们可以用 [Gemfile](https://guides.cocoapods.org/using/a-gemfile.html)，具体步骤是
+>
+>1、`gem install bundler`
+>
+>2、`cd Your Project`
+>
+>3、`bundle init`
+>
+>4、`vim Gemfile` and add 
+>
+```
+    # frozen_string_literal: true
+
+    #source 'https://rubygems.org'
+    source 'https://gems.ruby-china.com'//in China
+
+    git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+
+    # gem "rails"
+    gem 'cocoapods', '1.7.0'
+```
+>
+>5、`bundle exec pod install --verbose --no-repo-update` or `bundle exec pod update --verbose --no-repo-update`
   
 ##### 4、MVVM 的运用
 &emsp;&emsp;具体项目的实现我们还是以登录为例，在 ViewModel 中
