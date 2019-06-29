@@ -4,7 +4,7 @@
 ## 一、关于架构模式
 &emsp;&emsp;我们先来了解一下在 iOS 中常用的一些架构模式
 ##### 1. [MVC](https://zh.wikipedia.org/wiki/MVC)
-&ensp;&ensp;&ensp;&ensp;关于 MVC（Model-View-Controller）这个设计模式我相信稍有些编程经验的人都了解至少听说过，作为应用最为广泛的架构模式，大家应该都是耳熟能详了，但是不同的人对 MVC 的理解是不同的。在 iOS 中，Cocoa Touch 框架使用的就是 MVC ，如下
+&emsp;&emsp;关于 MVC（Model-View-Controller）这个设计模式我相信稍有些编程经验的人都了解至少听说过，作为应用最为广泛的架构模式，大家应该都是耳熟能详了，但是不同的人对 MVC 的理解是不同的。在 iOS 中，Cocoa Touch 框架使用的就是 MVC ，如下
 
 <p align='center'>
 <img src='https://github.com/loveway/LearnBlog/blob/master/Notes/Objective-C/image/ar_mvc.png'>
