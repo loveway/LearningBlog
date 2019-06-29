@@ -1,14 +1,10 @@
----
-title: Go 中 slice 的那些事  #文章标题
-date: 2017-11-08 #时间，一般不用改
-categories: Go #目录分类
-tags: [Go, slice, 切片] #标签，格式可以是[Hexo,总结]，中间用英文逗号分开
-keywords: slice,切片,Go #文章关键词，多个关键词用英文逗号隔开
----
-<center>![Go](http://upload-images.jianshu.io/upload_images/571495-70c3e7915ad2de18.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/220)</center>
+
+# Go 中 slice 的那些事 
+
+![Go](http://upload-images.jianshu.io/upload_images/571495-70c3e7915ad2de18.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/220)
 
 ## 定义
-我们都知道在 Go 语言中，数组的长度是不可变的，那么为了更加灵活的处理数据，Go 提供了一种功能强悍的类型切片（slice），slice 可以理解为 “动态数组”。但是 slice 并不是真正意义上的动态数组，而是一个引用类型。slice 总是指向一个底层 array，slice 的声明也可以像 array 一样，只是不需要长度。slice 的声明和数组类似，如下<!--more -->
+我们都知道在 Go 语言中，数组的长度是不可变的，那么为了更加灵活的处理数据，Go 提供了一种功能强悍的类型切片（slice），slice 可以理解为 “动态数组”。但是 slice 并不是真正意义上的动态数组，而是一个引用类型。slice 总是指向一个底层 array，slice 的声明也可以像 array 一样，只是不需要长度。slice 的声明和数组类似，如下
 ```go
 var iSlice []int
 ```
