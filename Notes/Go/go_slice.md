@@ -34,7 +34,7 @@ slice1 := make([]int, 5, 10)
 ```go
 slice2 := make([]int, 5)
 ```
-这样就会根据实际情况动态分配内存，而不是最开始指定一块固定大小的内存。需要注意的是我们一般使用 make() 函数来创建 slice，因为我们可以指定 slice 的容量，这样在最开始创建的时候就分配好空间，避免数据多次改变导致多次重新改变 cap 分配空间带来不必要的开销。
+这样就会根据实际情况动态分配内存，而不是最开始指定一块固定大小的内存。需要注意的是我们一般使用 `make()` 函数来创建 slice，因为我们可以指定 slice 的容量，这样在最开始创建的时候就分配好空间，避免数据多次改变导致多次重新改变 cap 分配空间带来不必要的开销。
 ## 二、slice 的特性
 &emsp;&emsp;关于 slice 的一些基本特性，[《Go Web 编程》](https://github.com/astaxie/build-web-application-with-golang/blob/master/zh/02.2.md) 这本书里已经讲的很详细，有对基本知识不清楚的童鞋可以去补习一下，这里就不一一叙述了。我么来看一个例子，
 ```go
@@ -54,13 +54,13 @@ func main() {
 这个时候我们运行，控制台打印
 
 <p align='center'>
-<img src='https://github.com/loveway/LearningBlog/blob/master/Notes/Go/image/slice2.png'>
+<img src='https://github.com/loveway/LearningBlog/blob/master/Notes/Go/image/slice10.png'>
 </p>
 
 我们会看到 aSlice 进行 append 操作以后，它的容量增加了一倍，cap 并没有变成我们想象中的 6 ，而是变成了 10
 
 <p align='center'>
-<img src='https://github.com/loveway/LearningBlog/blob/master/Notes/Go/image/slice3.png'>
+<img src='https://github.com/loveway/LearningBlog/blob/master/Notes/Go/image/slice2.png'>
 </p>
 
 如果我们最开始 slice 的容量是 10，长度是 5 ，那么再加一个元素是不会改变切片的容量的。也就是说，当我们往 slice中增加元素超过原来的容量时，slice 会自增容量，当现有长度 < 1024 时 cap 增长是翻倍的，当超过 1024，cap 的增长是 1.25 倍增长。我们来看一下 [slice.go](https://github.com/golang/go/blob/master/src/runtime/slice.go) 的源码会发现有这样一个函数，里面说明了 cap 的增长规则
@@ -121,7 +121,11 @@ func main() {
 
 ```
 我们会看到控制台输出
-<div align="center">![print](http://upload-images.jianshu.io/upload_images/571495-5edc429446adc268.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</div>
+
+<p align='center'>
+<img src='https://github.com/loveway/LearningBlog/blob/master/Notes/Go/image/slice3.png'>
+</p>
+
 变化过程如下图所示
 
 <p align='center'>
@@ -212,7 +216,7 @@ func main() {
        //如果是 copy( aSlice, bSlice) 则结果是 [4 5 6] 
 }
 ```
-也就是说 copy() 函数有两个参数，一个是 to 一个是 from，就是将第二个 copy 到第一个上面，如果第一个长度小于第二个，那么就会 copy 与第一个等长度的值，如 copy( aSlice, bSlice) 的结果是 [4 5 6] ，反之则是短的覆盖长的前几位。当然我们也可以指定复制长度
+也就是说 `copy()` 函数有两个参数，一个是 to 一个是 from，就是将第二个 copy 到第一个上面，如果第一个长度小于第二个，那么就会 copy 与第一个等长度的值，如 copy( aSlice, bSlice) 的结果是 [4 5 6] ，反之则是短的覆盖长的前几位。当然我们也可以指定复制长度
 ```go
 package main
 
