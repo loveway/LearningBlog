@@ -302,7 +302,7 @@ button.snp.makeConstraints { (make) -> Void in
 }
 ```
 结果输出的 `Unable to simultaneously satisfy constraints.` 日志就是用了约束标签来清楚地告诉我们哪些约束需要注意：
-```swift
+```
 "<SnapKit.LayoutConstraint:buttonViewTopConstraint@SignUpViewController.swift#311
 UIView:0x7fd98491e4c0.leading == UIView:0x7fd983633880.leading>"
 ```
