@@ -2,6 +2,10 @@
 
 # 一些日常学习的想法、总结
 ## Swift
+| Project | Article |
+|:-------:|:-------:|
+|   Layout   | [SnapKit 中文文档翻译](https://github.com/loveway/LearningBlog/blob/master/Notes/Swift/snapkit_cn_guide.md)|
+
 
 ## Git
 | Project | Article |
