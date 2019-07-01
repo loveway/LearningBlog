@@ -6,7 +6,6 @@
 
 
 - [要求](#要求)
-- [迁移指南](#迁移指南)
 - [交流](#交流)
 - [安装](#安装)
 - [使用](#使用)
@@ -15,9 +14,6 @@
 *  iOS 8.0+ / Mac OS X 10.11+ / tvOS 9.0+
 *  Xcode 9.0+
 *  Swift 4.0+
-
-# 迁移指南
-* [SnapKit 3.0 Migration Guide](https://github.com/SnapKit/SnapKit/blob/master/Documentation/SnapKit%203.0%20Migration%20Guide.md)
 
 # 交流
 * 如果你需要帮助，使用  [Stack Overflow](http://stackoverflow.com/questions/tagged/snapkit) 。（标签 `snapkit`）
@@ -68,7 +64,7 @@ github "SnapKit/SnapKit" ~> 4.0
 # 使用
 SnapKit 设计的就是为了更简单的使用。假设我们想布局一个 box ，让它到父视图边缘距离是 20pts
 
-```
+```swift
 let box = UIView()
 superview.addSubview(box)
 
@@ -83,7 +79,7 @@ box.snp.makeConstraints { (make) -> Void in
 
 或者更短：
 
-```
+```swift
 let box = UIView()
 superview.addSubview(box)
 
@@ -106,7 +102,7 @@ box.snp.makeConstraints { (make) -> Void in
    
 以上是接受一个参数的约束，下面的这些中任意一个也都可以：
 ##### 1. ViewAttribute
-```
+```swift
 make.centerX.lessThanOrEqualTo(view2.snp.left)
 ```
 
@@ -126,25 +122,25 @@ make.centerX.lessThanOrEqualTo(view2.snp.left)
 
 ##### 2. UIView/NSView
 如果你想让 view.left 大于或等于 label.left ：
-```
+```swift
 // these two constraints are exactly the same 这两个约束是完全一样的
 make.left.greaterThanOrEqualTo(label)
 make.left.greaterThanOrEqualTo(label.snp.left)
 ```
 ##### 3. Strict Checks
 Auto Layout 允许你把宽高设置成一个常量。如果你想设置一个 view 宽度的最大值和最小值，你可以像下面这样：
-```
+```swift
 // width >= 200 && width <= 400
 make.width.greaterThanOrEqualTo(200)
 make.width.lessThanOrEqualTo(400)
 ```
 但是，像 left，right，centerY 等等这样的对齐属性， Auto Layout 是不允许你把它们设置成常量的。但是如果你把这些属性设置成了常量，SnapKit 会把这些转换成相对于父视图的约束：
-```
+```swift
 // creates view.left <= view.superview.left + 10
 make.left.lessThanOrEqualTo(10)
 ```
 你也可以使用其他的方法构建你的约束，如下：
-```
+```swift
 make.top.equalTo(42)
 make.height.equalTo(20)
 make.size.equalTo(CGSize(width: 50, height: 100))
@@ -155,7 +151,7 @@ make.left.equalTo(view).offset(UIEdgeInsetsMake(10, 0, 10, 0))
 > `.priority`允许你来指定明确的优先级
 
 优先级可以写在约束链的末尾，如下：
-```
+```swift
 make.top.equalTo(label.snp.top).priority(600)
 ```
 ### 一些组合
@@ -163,7 +159,7 @@ make.top.equalTo(label.snp.top).priority(600)
 SnapKit 还提供了一些便利的方法来同时创建多个约束。
 
 ##### edges
-```
+```swift
 // make top, left, bottom, right equal view2
 make.edges.equalTo(view2)
 
@@ -172,7 +168,7 @@ make.edges.equalTo(view2)
 make.edges.equalTo(superview).inset(UIEdgeInsetsMake(5, 10, 15, 20))
 ```
 ##### size
-```
+```swift
 // make width and height greater than or equal to titleLabel
 make.size.greaterThanOrEqualTo(titleLabel)
 
@@ -180,7 +176,7 @@ make.size.greaterThanOrEqualTo(titleLabel)
 make.size.equalTo(superview).offset(CGSize(width: 100, height: -50))
 ```
 ##### center
-```
+```swift
 // make centerX and centerY = button1
 make.center.equalTo(button1)
 
@@ -188,7 +184,7 @@ make.center.equalTo(button1)
 make.center.equalTo(superview).offset(CGPoint(x: -5, y: 10))
 ```
 你也可以创建视图的属性链以增加可读性：
-```
+```swift
 // All edges but the top should equal those of the superview
 make.left.right.bottom.equalTo(superview)
 make.top.equalTo(otherView)
@@ -198,7 +194,7 @@ make.top.equalTo(otherView)
 
 ##### 1. References
 你可以通过约束的 make 表达式将局部变量或者类属性的约束结果分配给一个指定的约束。你也可以通过将它们存在数组中来引用多个约束。
-```
+```swift
 var topConstraint: Constraint? = nil
 
 ...
@@ -218,7 +214,7 @@ self.topConstraint.updateOffset(5)
 ```
 ##### 2. snp.updateConstraints
 如果你只是想更新约束的值，你可以使用 `snp.updateConstraints` 方法来替代 `snp.makeConstraints`
-```
+```swift
 // this is Apple's recommended place for adding/updating constraints
 // this method can get called multiple times in response to setNeedsUpdateConstraints
 // which can be called by UIKit internally or in your code if you need to trigger an update to your constraints
@@ -237,7 +233,7 @@ override func updateConstraints() {
 ```
 ##### 3. snp.remakeConstraints
 `snp.remakeConstraints` 和 ` snp.makeConstraints` 类似。不同的是，使用`snp.remakeConstraints` 需要先删除 SnapKit 安装的所有约束。
-```
+```swift
 func changeButtonPosition() { 
   self.button.snp.remakeConstraints { (make) -> Void in 
     make.size.equalTo(self.buttonSize) 
@@ -253,3 +249,60 @@ func changeButtonPosition() {
 ```
 
 ##### 4. Snap view to topLayoutGuide and bottomLayoutGuide
+`topLayoutGuide.snp.bottom` 和 `topLayoutGuide.bottomAnchor` 类似，你也可以使用 `bottomLayoutGuide.snp.top` 来对齐 UITabBar 上面的视图。
+
+```swift
+import SnapKit
+
+class MyViewController: UIVewController {
+    
+    lazy var tableView = UITableView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.view.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) -> Void in
+           make.top.equalTo(self.topLayoutGuide.snp.bottom)
+           make.left.equalTo(view)
+           make.right.equalTo(view)
+           make.bottom.equalTo(self.bottomLayoutGuide.snp.top)
+        }
+    }
+}
+```
+
+##### 5. Snap view to safeAreaLayoutGuide
+就像 `topLayoutGuide` 和 `bottomLayoutGuide` 一样，使用 iPhone X 的新属性 `safeAreaLayoutGuide` 也是非常简单的。
+
+```swift
+import SnapKit
+
+class MyViewController: UIVewController {
+    
+    lazy var tableView = UITableView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.view.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) -> Void in
+           make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+        }
+    }
+}
+```
+
+##### 6. Debug with ease
+> `.labeled` 允许你为调试日志指定特定的约束标签
+标签可以像下面这样，跟在约束链的后面：
+```swift
+button.snp.makeConstraints { (make) -> Void in
+  make.top.equalTo(otherView).labeled("buttonViewTopConstraint")
+}
+```
+结果输出的 `Unable to simultaneously satisfy constraints.` 日志就是用了约束标签来清楚地告诉我们哪些约束需要注意：
+```swift
+"<SnapKit.LayoutConstraint:buttonViewTopConstraint@SignUpViewController.swift#311
+UIView:0x7fd98491e4c0.leading == UIView:0x7fd983633880.leading>"
+```
