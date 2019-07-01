@@ -586,7 +586,7 @@ NSString *const gc_actionRegistVC = @"registViewController";
 >
 > 1、[浅谈 MVC、MVP 和 MVVM 架构模式](https://draveness.me/mvx) 
 >
-> 2、[iOS应用架构谈 view层的组织和调用方案](https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html)
+> 2、[iOS应用架构谈 view 层的组织和调用方案](https://casatwy.com/iosying-yong-jia-gou-tan-viewceng-de-zu-zhi-he-diao-yong-fang-an.html)
 >
 > 3、[iOS 如何实现Aspect Oriented Programming](https://www.jianshu.com/p/dc9dca24d5de)
 > 
