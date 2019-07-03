@@ -51,3 +51,16 @@ func TestImp(t *testing.T) {
 	t.Log(a, b)
 }
 ```
+##### 4、类型别名
+`type myString string`
+##### 5、指针
+指针不能直接进行计算, 字符串申明时没赋值，初始值是 "" ，如下 `s = ""`
+```go
+func TestPoint(t *testing.T) {
+	var s string
+	t.Log("s is", s)
+	s = "loveway"
+	pS := &s + 1// error "invalid operation: &s + 1 (mismatched types *string and int)"
+}
+```
+
