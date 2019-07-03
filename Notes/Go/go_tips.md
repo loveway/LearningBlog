@@ -54,7 +54,7 @@ func TestImp(t *testing.T) {
 ##### 4、类型别名
 `type myString string`
 ##### 5、指针
-指针不能直接进行计算, 字符串申明时没赋值，初始值是 "" ，如下 `s = ""`
+指针不能直接进行计算, 字符串申明时没赋值，初始值是 "" ，如下 `s = ""`，Go 里面的 string 是值类型
 ```go
 func TestPoint(t *testing.T) {
 	var s string
