@@ -24,3 +24,4 @@
 | Project | Article |
 |:-------:|:-------:|
 |   slice   | [Go 中 slice 的那些事](https://github.com/loveway/LearningBlog/blob/master/Notes/Go/go_slice.md)|
+|   Go   | [Go Tips](https://github.com/loveway/LearningBlog/blob/master/Notes/Go/go_tips.md)|
