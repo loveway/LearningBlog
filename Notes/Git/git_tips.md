@@ -20,6 +20,8 @@
 
 ##### `git log` 
 显示从最近到最远的提交日志（如果想看 log 的简便信息，可以使用 `git log --pretty=oneline` 这个命令）
+##### `git commit --amend` 
+修改提交的历史，比如我写的 `git commit -m 'add new filr'`，file 写错 成 filr 了，我就可以用这个命令进入到 commit 里面去修改
 
 ##### `git reset --hard HEAD^` 
 回退到上一个版本（在 Git 中，用 HEAD 表示当前版本，也就是最新的提交 1094adb...（注意我的提交 id 和你的肯定不一样），上一个版本就是 HEAD^，上上一个版本就是 HEAD^^，当然往上 100 个版本写 100个 ^ 比较容易数不过来，所以写成 HEAD~100）
