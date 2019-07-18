@@ -33,3 +33,4 @@
 |:-------:|
 | [谈谈 iOS 中图片的解压缩](http://blog.leichunfeng.com/blog/2017/02/20/talking-about-the-decompression-of-the-image-in-ios/)|
 | [iOS的离屏渲染](https://imlifengfeng.github.io/article/593/)|
+| [关于离屏渲染的深入研究](https://medium.com/@jasonyuh/%E5%85%B3%E4%BA%8E%E7%A6%BB%E5%B1%8F%E6%B8%B2%E6%9F%93%E7%9A%84%E6%B7%B1%E5%85%A5%E7%A0%94%E7%A9%B6-e776f56b3e60)|
